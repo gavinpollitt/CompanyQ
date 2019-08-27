@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -23,16 +24,21 @@ public class Company {
 	@NotNull
 	private String description;
 	
+	@NotNull
+	@Digits(integer=12,fraction=0)
+	private String number;
+	
 	private LocalDate createdDate;
 	
 	public Company() {
 		this.createdDate = LocalDate.now();
 	}
 
-    public Company(final long id, final String name, final String description) {
+    public Company(final long id, final String name, final String description, final String number) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.number = number;
     }
 
     public Long getId() {
@@ -47,6 +53,10 @@ public class Company {
 		return description;
 	}
 
+	public String getNumber() {
+		return number;
+	}
+	
 	public LocalDate getCreatedDate() {
 		return createdDate;
 	}

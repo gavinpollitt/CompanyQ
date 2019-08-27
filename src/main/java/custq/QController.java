@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
  *         curl -i -X POST -d @cc.json -H "Content-Type: application/json" http://localhost:8080/queueManager/addCompany?timeout=xxx 
  *         curl -i -X GET -H "Content-Type: application/json" http://localhost:8080/queueManager/getCompany?timeout=xxx 
  *         curl -i -X GET -H "Content-Type: application/json" http://localhost:8080/queueManager/getCompanies/3 
- *		   cc.json--> {"name":"GavWebCo2","description":"The final description"}
+ *		   cc.json--> {"name":"GavWebCo2","description":"The final description","number":"07543334532"}
  *         rm ~/temp/data/q.mv.db
  */
 @RestController

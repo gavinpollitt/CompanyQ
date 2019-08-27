@@ -39,7 +39,7 @@ public class StandaloneQTest {
 	@Test
 	public void addEntry() {
 		qservice.purge();
-		Company c = new Company(10, "TestCo", "TestCo Description");
+		Company c = new Company(10, "TestCo", "TestCo Description","07423134565");
 		ArgumentCaptor<Company> saveCaptor = ArgumentCaptor.forClass(Company.class);
 		ArgumentCaptor<Company> delCaptor = ArgumentCaptor.forClass(Company.class);
 
@@ -79,8 +79,8 @@ public class StandaloneQTest {
 	@Test(expected = QueueEmptyException.class)
 	public void emptyQueue() throws QueueEmptyException {
 		qservice.purge();
-		Company[] companies = new Company[] { new Company(10, "TestCo", "TestCo Description"),
-				new Company(11, "TestCo", "TestCo Description") };
+		Company[] companies = new Company[] { new Company(10, "TestCo", "TestCo Description","07423134565"),
+				new Company(11, "TestCo", "TestCo Description","07423134565") };
 
 		for (Company c : companies) {
 			try {
@@ -130,7 +130,7 @@ public class StandaloneQTest {
 		Thread removerThread = new Thread(remover);
 		removerThread.start();
 
-		qservice.add(new Company(50, "NewCo", "TestCo Description"), 3L);
+		qservice.add(new Company(50, "NewCo", "TestCo Description","07423134565"), 3L);
 	}
 
 	/*
@@ -147,7 +147,7 @@ public class StandaloneQTest {
 			public void run() {
 				try {
 					Thread.sleep(2000);
-					qservice.add(new Company(50, "NewCo", "TestCo Description"));
+					qservice.add(new Company(50, "NewCo", "TestCo Description","07423134565"));
 				} catch (Exception e) {
 					fail("Cannot add company to queue");
 				}
@@ -190,9 +190,9 @@ public class StandaloneQTest {
 	public void syncQ() throws Exception {
 		qservice.purge();
 		
-		Company[] rc = new Company[] { new Company(10, "TestCo", "TestCo Description"),
-				new Company(11, "TestCo", "TestCo Description"), new Company(12, "TestCo", "TestCo Description"),
-				new Company(13, "TestCo", "TestCo Description")};
+		Company[] rc = new Company[] { new Company(10, "TestCo", "TestCo Description","07423134565"),
+				new Company(11, "TestCo", "TestCo Description","07423134565"), new Company(12, "TestCo", "TestCo Description","07423134565"),
+				new Company(13, "TestCo", "TestCo Description","07423134565")};
 		List<Company> retComps = Arrays.asList(rc);
 		
 		when(companyRepositoryMock.findAll()).thenReturn(retComps);
@@ -216,9 +216,9 @@ public class StandaloneQTest {
 	 */
 	private void fillQueue() {
 		qservice.purge();
-		Company[] companies = new Company[] { new Company(10, "TestCo", "TestCo Description"),
-				new Company(11, "TestCo", "TestCo Description"), new Company(12, "TestCo", "TestCo Description"),
-				new Company(13, "TestCo", "TestCo Description"), new Company(14, "TestCo", "TestCo Description") };
+		Company[] companies = new Company[] { new Company(10, "TestCo", "TestCo Description","07423134565"),
+				new Company(11, "TestCo", "TestCo Description","07423134565"), new Company(12, "TestCo", "TestCo Description","07423134565"),
+				new Company(13, "TestCo", "TestCo Description","07423134565"), new Company(14, "TestCo", "TestCo Description","07423134565") };
 
 		for (Company c : companies) {
 			try {

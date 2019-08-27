@@ -58,7 +58,7 @@ public class ControllerTests {
 	public void t1AddCompany() throws Exception {
 		this.mockMvc
 				.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-						.content("{\"name\":\"GavWebCo\",\"description\":\"The final description\"}"))
+						.content("{\"name\":\"GavWebCo\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 				.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 
 	}
@@ -128,27 +128,27 @@ public class ControllerTests {
 		
 		this.mockMvc
 		.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"GavWebCo1\",\"description\":\"The final description\"}"))
+				.content("{\"name\":\"GavWebCo1\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 		.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 		
 		this.mockMvc
 		.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"GavWebCo2\",\"description\":\"The final description\"}"))
+				.content("{\"name\":\"GavWebCo2\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 		.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 
 		this.mockMvc
 		.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"GavWebCo3\",\"description\":\"The final description\"}"))
+				.content("{\"name\":\"GavWebCo3\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 		.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 
 		this.mockMvc
 		.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"GavWebCo4\",\"description\":\"The final description\"}"))
+				.content("{\"name\":\"GavWebCo4\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 		.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 
 		this.mockMvc
 		.perform(post("/queueManager/addCompany").param("timeout", "5").contentType(MediaType.APPLICATION_JSON)
-				.content("{\"name\":\"GavWebCo5\",\"description\":\"The final description\"}"))
+				.content("{\"name\":\"GavWebCo5\",\"description\":\"The final description\",\"number\":\"075416634\"}"))
 		.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 
 		this.mockMvc
@@ -207,7 +207,7 @@ public class ControllerTests {
 				this.mockMvc
 						.perform(post("/queueManager/addCompany").param("timeout", "2")
 								.contentType(MediaType.APPLICATION_JSON)
-								.content("{\"name\":\"GavWebCo\",\"description\":\"The final description\"}"))
+								.content("{\"name\":\"GavWebCo\",\"description\":\"The final description\",\\\"number\\\":\\\"075416634\\\"}"))
 						.andDo(print()).andExpect(status().isOk()).andExpect(jsonPath("$").isNumber());
 				this.added = 1;
 			} catch (Throwable e) {
