@@ -9,14 +9,23 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+/**
+ * 
+ * @author regen
+ *
+ * The service responsible maintaining the queue and its related backing store
+ */
 @Component
 public class QService {
 
 	@Autowired
 	private CompanyRepository companyRepository;
 	
-	private BlockingQueue<Company>  companyQueue = new ArrayBlockingQueue<>(5);;
+	private BlockingQueue<Company>  companyQueue = new ArrayBlockingQueue<>(5);
 
+	/**
+	 * Remove all messages from the queue
+	 */
 	public void purge() {
 		companyQueue.clear();
 	}
@@ -25,6 +34,12 @@ public class QService {
 		this.add(c, null);
 	}
 
+	/**
+	 * 
+	 * @param c The company to add
+	 * @param timeout How long to wait if the queue is full
+	 * @throws QueueFullException
+	 */
 	public void add(final Company c, final Long timeout) throws QueueFullException {
 		boolean added = false;
 		try {
@@ -43,6 +58,13 @@ public class QService {
 		return this.get(null);
 	}
 
+	/**
+	 * 
+	 * @param c The company to add
+	 * @param timeout How long to wait if the queue is empty
+	 * @throws QueueEmptyException
+	 * @returns The company to add
+	 */
 	public Company get(final Long timeout) throws QueueEmptyException {
 		Company got = null;
 
@@ -59,6 +81,11 @@ public class QService {
 		return got;
 	}
 
+	/**
+	 * 
+	 * @param sz the maximum number of companies to retrieve in the group
+	 * @return A list of the companies identified
+	 */
 	public List<Company> getGroup(final int sz)  {
 		if (sz < 1)
 			throw new IllegalArgumentException("A group size must be greater than 1");
@@ -72,6 +99,10 @@ public class QService {
 		return companies;
 	}
 	
+	/**
+	 * Re-synchronise the queue with its underlying data store
+	 * @throws Exception
+	 */
 	public void synchronise() throws Exception {
 		this.purge();
 		Iterable<Company> companies = this.companyRepository.findAll();

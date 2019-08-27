@@ -18,13 +18,11 @@ import org.springframework.web.server.ResponseStatusException;
  * 
  * @author regen
  *
- *         curl -i -X POST -d @cc.json -H "Content-Type: application/json"
- *         http://localhost:8080/queueManager/addCompany?timeout=xxx curl -i -X
- *         GET -H "Content-Type: application/json"
- *         http://localhost:8080/queueManager/getCompany?timeout=xxx curl -i -X
- *         GET -H "Content-Type: application/json"
- *         http://localhost:8080/queueManager/getCompanies/3 rm
- *         ~/temp/data/q.mv.db
+ *         curl -i -X POST -d @cc.json -H "Content-Type: application/json" http://localhost:8080/queueManager/addCompany?timeout=xxx 
+ *         curl -i -X GET -H "Content-Type: application/json" http://localhost:8080/queueManager/getCompany?timeout=xxx 
+ *         curl -i -X GET -H "Content-Type: application/json" http://localhost:8080/queueManager/getCompanies/3 
+ *		   cc.json--> {"name":"GavWebCo2","description":"The final description"}
+ *         rm ~/temp/data/q.mv.db
  */
 @RestController
 @RequestMapping("/queueManager")
@@ -36,6 +34,12 @@ public class QController {
 	@Autowired
 	private QService qservice;
 
+	/**
+	 * API to add a new company to the queue
+	 * @param company  The company details provided in the request body JSON 
+	 * @param timeout  A timeout value can be supplied if willing to wait for a entry in the queue
+	 * @return the id of the company
+	 */
 	@RequestMapping(value = "/addCompany", consumes = "application/json", method = RequestMethod.POST)
 	public Long add(@RequestBody Company company, @RequestParam(defaultValue = "0") String timeout) {
 
@@ -56,6 +60,11 @@ public class QController {
 		return company.getId();
 	}
 
+	/**
+	 * API to retrieve the next available company from the queue
+	 * @param timeout  A timeout value can be supplied if willing to wait for a entry to appear in the queue
+	 * @return the company JSON
+	 */
 	@RequestMapping(value = "/getCompany", consumes = "application/json", method = RequestMethod.GET)
 	public Company get(@RequestParam(defaultValue = "0") String timeout) {
 		Long to = null;
@@ -76,12 +85,21 @@ public class QController {
 		return c;
 	}
 
+	/**
+	 * API to retrieve multiple companies from the queue
+	 * @param size the maximum number of companies to retrieve
+	 * @return the JSON holding the companies retrieved
+	 */
 	@RequestMapping(value = "/getCompanies/{size}", consumes = "application/json", method = RequestMethod.GET)
 	public List<Company> getMany(@PathVariable int size) {
 		List<Company> cl = qservice.getGroup(size);
 		return cl;
 	}
 
+	/**
+	 * Method to re-instate the queue on application start-up
+	 * @throws Exception
+	 */
 	@PostConstruct
 	public void handleContextRefreshEvent() throws Exception {
 		qservice.synchronise();

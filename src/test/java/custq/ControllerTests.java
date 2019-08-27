@@ -42,7 +42,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class GreetingControllerTests {
+public class ControllerTests {
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -50,6 +50,10 @@ public class GreetingControllerTests {
 	@Autowired
 	private QService qservice;
 
+	/**
+	 * Ensure that a new single company can be added to the queue
+	 * @throws Exception
+	 */
 	@Test
 	public void t1AddCompany() throws Exception {
 		this.mockMvc
@@ -59,6 +63,10 @@ public class GreetingControllerTests {
 
 	}
 
+	/**
+	 * Ensure that a single company can be retrieved from the queue
+	 * @throws Exception
+	 */
 	@Test
 	public void t2GetCompany() throws Exception {
 		this.mockMvc
@@ -67,6 +75,10 @@ public class GreetingControllerTests {
 				.andExpect(jsonPath("$.description").exists());
 	}
 
+	/**
+	 * Test with multiple threads (10 posts/10 gets with timeouts) to ensure that final queue length is zero
+	 * @throws Exception
+	 */
 	@Test
 	public void t3ValidateConcurrency() throws Exception {
 		qservice.purge();
@@ -106,6 +118,10 @@ public class GreetingControllerTests {
 
 	}
 
+	/**
+	 * Ensure that a group can be correctly retrieved
+	 * @throws Exception
+	 */
 	@Test
 	public void t4GetAGroup() throws Exception {
 		qservice.purge();
@@ -146,6 +162,10 @@ public class GreetingControllerTests {
 		
 	}
 
+	/**
+	 * Convenience method to hang around for latch to drop to complete
+	 * @param latch
+	 */
 	private static void waitForChildThreadsToComplete(final CountDownLatch latch) {
         try {
             latch.await();
@@ -155,10 +175,20 @@ public class GreetingControllerTests {
         }
 	}
 
+	/**
+	 * root interface for test threads
+	 * @author regen
+	 *
+	 */
 	private static abstract class TestThread extends Thread {
 		public abstract int adjustedVal();
 	}
 	
+	/**
+	 * Thread class to add company with a timeout wait of 2 seconds
+	 * @author regen
+	 *
+	 */
 	private static class AdderThread extends TestThread {
 
 		private int added = 0;
@@ -193,6 +223,11 @@ public class GreetingControllerTests {
 
 	}
 
+	/**
+	 * Thread class to fetch company with a timeout wait of 5 seconds
+	 * @author regen
+	 *
+	 */
 	private static class GetterThread extends TestThread {
 
 		private int removed = 0;

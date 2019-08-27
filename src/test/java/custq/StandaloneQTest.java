@@ -24,12 +24,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 @RunWith(MockitoJUnitRunner.class)
 @SpringBootTest
 public class StandaloneQTest {
+	// Mocking the repo itself
 	@Mock
 	CompanyRepository companyRepositoryMock;
 
+	//Inject the repo into the QService instance
 	@InjectMocks
 	QService qservice = new QService();
 
+	/**
+	 * Ensure that the repository interactions are correct when a company is added and then removed
+	 * through the service. 
+	 */
 	@Test
 	public void addEntry() {
 		qservice.purge();
@@ -57,6 +63,9 @@ public class StandaloneQTest {
 		assertTrue("Customer was not removed from database", delCaptor.getValue().getId() == 10);
 	}
 
+	/**
+	 * Ensure that the queue full exception is thrown when an 'add entry' attempt is made to a full queue 
+	 */
 	@Test(expected = QueueFullException.class)
 	public void fullQueue() throws QueueFullException {
 		fillQueue();
@@ -64,6 +73,9 @@ public class StandaloneQTest {
 		qservice.add(new Company());
 	}
 
+	/**
+	 * Ensure that the queue empty exception is thrown when an 'get entry' attempt is made to an empty queue 
+	 */
 	@Test(expected = QueueEmptyException.class)
 	public void emptyQueue() throws QueueEmptyException {
 		qservice.purge();
@@ -94,6 +106,10 @@ public class StandaloneQTest {
 		qservice.get();
 	}
 
+	/**
+	 * Ensure entry can be added following its collection during timeout period
+	 * @throws QueueFullException
+	 */
 	@Test
 	public void addEntryWithTimeout() throws QueueFullException {
 		fillQueue();
@@ -117,6 +133,10 @@ public class StandaloneQTest {
 		qservice.add(new Company(50, "NewCo", "TestCo Description"), 3L);
 	}
 
+	/*
+	 * Ensure entry can be collected following its addition during timeout period
+	 * @throws QueueFullException
+	 */
 	@Test
 	public void removeEntryWithTimeout() throws QueueEmptyException {
 		qservice.purge();
@@ -140,6 +160,10 @@ public class StandaloneQTest {
 		qservice.get(3L);
 	}
 	
+	/**
+	 * Ensure that a group can be correctly received.
+	 * @throws Exception
+	 */
 	@Test
 	public void getGroup() throws Exception {
 		qservice.purge();
@@ -158,6 +182,10 @@ public class StandaloneQTest {
 				companies.stream().map(c -> c.getId()).reduce(0L,(r,n)->r+n) == 46);
 	}
 	
+	/**
+	 * Test to ensure that queue synchronisation is correctly achieved
+	 * @throws Exception
+	 */
 	@Test
 	public void syncQ() throws Exception {
 		qservice.purge();
@@ -183,6 +211,9 @@ public class StandaloneQTest {
 		assertTrue("Invalid synchonisation of database to Q", dbComps.size() == 0);
 	}
 	
+	/**
+	 * Helper method to fill the queue with fun
+	 */
 	private void fillQueue() {
 		qservice.purge();
 		Company[] companies = new Company[] { new Company(10, "TestCo", "TestCo Description"),
