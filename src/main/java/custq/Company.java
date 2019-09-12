@@ -10,6 +10,11 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * JPA entity representing the company details
+ * @author regen
+ *
+ */
 @Entity
 public class Company {
 

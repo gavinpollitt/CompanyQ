@@ -2,6 +2,11 @@ package custq;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+/** 
+ * Externalised configuration properties
+ * @author regen
+ *
+ */
 @ConfigurationProperties(prefix="queue")
 public class QConfig {
 	private Integer maxEntries;
